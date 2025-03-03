@@ -120,7 +120,7 @@ HTML_TEMPLATE = """
     <h2>Calculadora de Reverb</h2>
     <form method="POST">
         <label for="bpm">Introduce el BPM:</label>
-        <input type="number" id="bpm" name="bpm" value="{{ bpm if bpm else '' }}" required>
+        <input type="number" id="bpm" autofocus name="bpm" value="{{ bpm if bpm else '' }}" required>
         <br>
 
         <div class="tap-container">
