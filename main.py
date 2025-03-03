@@ -2,7 +2,7 @@ from flask import Flask, request, render_template_string
 
 app = Flask(__name__)
 
-# HTML con diseño mejorado y botón TAP bien centrado
+# HTML con diseño mejorado y fondo de rejilla metálica
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html>
@@ -10,16 +10,51 @@ HTML_TEMPLATE = """
     <title>Calculadora de Reverb</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
-        h2 { font-size: 3vw; } /* Se adapta al tamaño de pantalla */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: url('https://www.transparenttextures.com/patterns/black-linen.png'); /* Fondo de rejilla metálica */
+            color: white;
+        }
+        h2 { font-size: 3vw; }
         label { font-size: 2.5vw; display: block; margin-top: 20px; }
-        input, select { font-size: 2.5vw; padding: 10px; width: 80%; max-width: 400px; margin-top: 10px; }
-        button { background-color: green; color: white; font-size: 3vw; padding: 15px 30px; border: none; cursor: pointer; margin-top: 20px; }
+        input, select {
+            font-size: 2.5vw;
+            padding: 10px;
+            width: 80%;
+            max-width: 400px;
+            margin-top: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid white;
+        }
+        button {
+            background-color: green;
+            color: white;
+            font-size: 3vw;
+            padding: 15px 30px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
         button:hover { background-color: darkgreen; }
-        table { width: 90%; max-width: 600px; margin: 20px auto; border-collapse: collapse; font-size: 2vw; }
-        th, td { border: 1px solid black; padding: 15px; text-align: center; }
+        table {
+            width: 90%;
+            max-width: 600px;
+            margin: 20px auto;
+            border-collapse: collapse;
+            font-size: 2vw;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+        }
+        th, td { border: 1px solid white; padding: 15px; text-align: center; }
 
-        /* Contenedor para centrar el botón TAP */
         .tap-container {
             display: flex;
             justify-content: center;
@@ -28,7 +63,6 @@ HTML_TEMPLATE = """
             margin-top: 20px;
         }
 
-        /* Botón TAP circular bien centrado */
         .tap-button {
             width: 120px;
             height: 120px;
@@ -42,13 +76,12 @@ HTML_TEMPLATE = """
             display: flex;
             align-items: center;
             justify-content: center;
-            touch-action: manipulation; /* Evita zoom en iPhone */
+            touch-action: manipulation;
         }
         .tap-button:active {
             background-color: darkred;
         }
 
-        /* Ajustes para pantallas pequeñas */
         @media (max-width: 600px) {
             h2 { font-size: 6vw; }
             label, input, select, button { font-size: 5vw; }
@@ -56,28 +89,6 @@ HTML_TEMPLATE = """
             .tap-button { width: 150px; height: 150px; font-size: 6vw; }
         }
     </style>
-    <script>
-        let tapTimes = [];
-
-        function tapBPM() {
-            let now = new Date().getTime();
-            tapTimes.push(now);
-            
-            if (tapTimes.length > 1) {
-                let intervals = [];
-                for (let i = 1; i < tapTimes.length; i++) {
-                    intervals.push(tapTimes[i] - tapTimes[i - 1]);
-                }
-                let avgInterval = intervals.reduce((a, b) => a + b, 0) / intervals.length;
-                let bpm = Math.round(60000 / avgInterval);
-                document.getElementById("bpm").value = bpm;
-            }
-
-            if (tapTimes.length > 4) {
-                tapTimes.shift();
-            }
-        }
-    </script>
 </head>
 <body>
     <h2>Calculadora de Reverb</h2>
@@ -86,7 +97,6 @@ HTML_TEMPLATE = """
         <input type="number" id="bpm" name="bpm" value="{{ bpm if bpm else '' }}" required>
         <br>
 
-        <!-- Contenedor para centrar el botón TAP -->
         <div class="tap-container">
             <button type="button" class="tap-button" onclick="tapBPM()">TAP</button>
         </div>
@@ -115,10 +125,9 @@ HTML_TEMPLATE = """
 
 def calcular_reverb(BPM, instrumento):
     negra = 60000 / BPM
-    demisemifusa = negra / 32  # Pre-delay basado en la demisemifusa
-    pre_delay = demisemifusa  
+    demifusa = negra / 16  # Demifusa
+    pre_delay = demifusa * 1.5  # Demifusa con puntillo
 
-    # Ajuste del tiempo de Decay según el instrumento
     if instrumento == "percusion":
         decay = (negra * 1) * 1.1  # Una negra + 10%
     else:
