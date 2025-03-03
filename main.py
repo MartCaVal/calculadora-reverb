@@ -93,28 +93,6 @@ HTML_TEMPLATE = """
             .tap-button { width: 160px; height: 160px; font-size: 6vw; }
         }
     </style>
-    <script>
-        let tapTimes = [];
-
-        function tapBPM() {
-            let now = new Date().getTime();
-            tapTimes.push(now);
-            
-            if (tapTimes.length > 1) {
-                let intervals = [];
-                for (let i = 1; i < tapTimes.length; i++) {
-                    intervals.push(tapTimes[i] - tapTimes[i - 1]);
-                }
-                let avgInterval = intervals.reduce((a, b) => a + b, 0) / intervals.length;
-                let bpm = Math.round(60000 / avgInterval);
-                document.getElementById("bpm").value = bpm;
-            }
-
-            if (tapTimes.length > 5) {
-                tapTimes.shift();
-            }
-        }
-    </script>
 </head>
 <body>
     <h2>Calculadora de Reverb</h2>
@@ -151,7 +129,7 @@ HTML_TEMPLATE = """
 
 def calcular_reverb(BPM, instrumento):
     negra = 60000 / BPM
-    demifusa = negra / 16  # Demifusa
+    demifusa = negra / 32  # Corrección: Demifusa es 1/32 de una negra
     pre_delay = demifusa * 1.5  # Demifusa con puntillo
 
     if instrumento == "percusion":
