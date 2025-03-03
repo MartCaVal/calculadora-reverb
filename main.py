@@ -97,7 +97,7 @@ HTML_TEMPLATE = """
         let tapTimes = [];
 
         function tapBPM() {
-            let now = new Date().getTime();
+            let now = performance.now();
             tapTimes.push(now);
 
             if (tapTimes.length > 1) {
