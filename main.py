@@ -8,7 +8,18 @@ def index():
     if request.method == 'POST':
         tipo_instrumento = request.form['tipo_instrumento']
         tiempo = request.form['tiempo']
-        resultado = f"Cálculo para {tipo_instrumento} con tiempo {tiempo} ms"
+        resultado = f"""
+        <table border="1" style="margin: 20px auto; font-size: 1.5em;">
+            <tr>
+                <th>Tipo de Instrumento</th>
+                <th>Tiempo (ms)</th>
+            </tr>
+            <tr>
+                <td>{tipo_instrumento}</td>
+                <td>{tiempo}</td>
+            </tr>
+        </table>
+        """
     
     return f'''
     <!DOCTYPE html>
@@ -25,6 +36,8 @@ def index():
             button {{ background-color: green; color: white; font-size: 2em; padding: 10px 20px; border: none; cursor: pointer; margin-top: 20px; }}
             button:hover {{ background-color: darkgreen; }}
             p {{ font-size: 1.5em; margin-top: 20px; }}
+            table {{ border-collapse: collapse; width: 50%; margin: 20px auto; }}
+            th, td {{ border: 1px solid black; padding: 10px; text-align: center; }}
         </style>
     </head>
     <body>
@@ -41,7 +54,7 @@ def index():
             <br>
             <button type="submit">Calcular</button>
         </form>
-        <p>{resultado}</p>
+        {resultado}
     </body>
     </html>
     '''
