@@ -2,25 +2,32 @@ from flask import Flask, request, render_template_string
 
 app = Flask(__name__)
 
-# HTML con diseño mejorado
+# HTML con diseño mejorado y título corregido
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Calculadora de Reverb y Pre-delay</title>
+    <title>Calculadora de Reverb</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
-        h2 { font-size: 2.5em; }
-        label { font-size: 1.5em; display: block; margin-top: 20px; }
-        input, select { font-size: 1.5em; padding: 10px; width: 300px; margin-top: 10px; }
-        button { background-color: green; color: white; font-size: 2em; padding: 15px 30px; border: none; cursor: pointer; margin-top: 20px; }
+        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+        h2 { font-size: 3vw; } /* Se adapta al tamaño de pantalla */
+        label { font-size: 2.5vw; display: block; margin-top: 20px; }
+        input, select { font-size: 2.5vw; padding: 10px; width: 80%; max-width: 400px; margin-top: 10px; }
+        button { background-color: green; color: white; font-size: 3vw; padding: 15px 30px; border: none; cursor: pointer; margin-top: 20px; }
         button:hover { background-color: darkgreen; }
-        table { width: 50%; margin: 20px auto; border-collapse: collapse; font-size: 1.5em; }
+        table { width: 90%; max-width: 600px; margin: 20px auto; border-collapse: collapse; font-size: 2vw; }
         th, td { border: 1px solid black; padding: 15px; text-align: center; }
+
+        /* Ajustes para pantallas pequeñas */
+        @media (max-width: 600px) {
+            h2 { font-size: 6vw; }
+            label, input, select, button { font-size: 5vw; }
+            table { font-size: 4vw; }
+        }
     </style>
 </head>
 <body>
-    <h2>Calculadora de Reverb y Pre-delay</h2>
+    <h2>Calculadora de Reverb</h2>
     <form method="POST">
         <label for="bpm">Introduce el BPM:</label>
         <input type="number" id="bpm" name="bpm" value="{{ bpm if bpm else '' }}" required>
