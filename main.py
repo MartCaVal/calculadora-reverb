@@ -1,8 +1,9 @@
-from flask import Flask, request, render_template_string
+from flask import Flask, request, render_template_string, jsonify
+import time
 
 app = Flask(__name__)
 
-# HTML con diseño mejorado y título corregido
+# HTML con diseño mejorado y botón TAP para calcular BPM
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html>
@@ -18,19 +19,61 @@ HTML_TEMPLATE = """
         table { width: 90%; max-width: 600px; margin: 20px auto; border-collapse: collapse; font-size: 2vw; }
         th, td { border: 1px solid black; padding: 15px; text-align: center; }
 
+        /* Botón TAP circular */
+        .tap-button {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: red;
+            color: white;
+            font-size: 2vw;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .tap-button:active {
+            background-color: darkred;
+        }
+
         /* Ajustes para pantallas pequeñas */
         @media (max-width: 600px) {
             h2 { font-size: 6vw; }
             label, input, select, button { font-size: 5vw; }
             table { font-size: 4vw; }
+            .tap-button { width: 100px; height: 100px; font-size: 5vw; }
         }
     </style>
+    <script>
+        let tapTimes = [];
+
+        function tapBPM() {
+            let now = new Date().getTime();
+            tapTimes.push(now);
+            
+            if (tapTimes.length > 1) {
+                let intervals = [];
+                for (let i = 1; i < tapTimes.length; i++) {
+                    intervals.push(tapTimes[i] - tapTimes[i - 1]);
+                }
+                let avgInterval = intervals.reduce((a, b) => a + b, 0) / intervals.length;
+                let bpm = Math.round(60000 / avgInterval);
+                document.getElementById("bpm").value = bpm;
+            }
+
+            if (tapTimes.length > 4) {
+                tapTimes.shift();
+            }
+        }
+    </script>
 </head>
 <body>
     <h2>Calculadora de Reverb</h2>
     <form method="POST">
         <label for="bpm">Introduce el BPM:</label>
         <input type="number" id="bpm" name="bpm" value="{{ bpm if bpm else '' }}" required>
+        <br>
+        <button type="button" class="tap-button" onclick="tapBPM()">TAP</button>
 
         <label for="instrumento">Selecciona tipo de Instrumento:</label>
         <select id="instrumento" name="instrumento">
