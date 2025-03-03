@@ -1,14 +1,14 @@
-from flask import Flask, request, render_template_string, jsonify
-import time
+from flask import Flask, request, render_template_string
 
 app = Flask(__name__)
 
-# HTML con diseño mejorado y botón TAP para calcular BPM
+# HTML con diseño mejorado y botón TAP corregido
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html>
 <head>
     <title>Calculadora de Reverb</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <style>
         body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
         h2 { font-size: 3vw; } /* Se adapta al tamaño de pantalla */
@@ -19,18 +19,22 @@ HTML_TEMPLATE = """
         table { width: 90%; max-width: 600px; margin: 20px auto; border-collapse: collapse; font-size: 2vw; }
         th, td { border: 1px solid black; padding: 15px; text-align: center; }
 
-        /* Botón TAP circular */
+        /* Botón TAP circular más grande */
         .tap-button {
-            width: 80px;
-            height: 80px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             background-color: red;
             color: white;
-            font-size: 2vw;
+            font-size: 4vw;
             font-weight: bold;
             border: none;
             cursor: pointer;
             margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation; /* Evita zoom en iPhone */
         }
         .tap-button:active {
             background-color: darkred;
@@ -41,7 +45,7 @@ HTML_TEMPLATE = """
             h2 { font-size: 6vw; }
             label, input, select, button { font-size: 5vw; }
             table { font-size: 4vw; }
-            .tap-button { width: 100px; height: 100px; font-size: 5vw; }
+            .tap-button { width: 150px; height: 150px; font-size: 6vw; }
         }
     </style>
     <script>
