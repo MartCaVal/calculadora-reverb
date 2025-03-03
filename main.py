@@ -2,7 +2,7 @@ from flask import Flask, request, render_template_string
 
 app = Flask(__name__)
 
-# HTML con diseño mejorado y botón TAP corregido
+# HTML con diseño mejorado y botón TAP bien centrado
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html>
@@ -10,7 +10,7 @@ HTML_TEMPLATE = """
     <title>Calculadora de Reverb</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
         h2 { font-size: 3vw; } /* Se adapta al tamaño de pantalla */
         label { font-size: 2.5vw; display: block; margin-top: 20px; }
         input, select { font-size: 2.5vw; padding: 10px; width: 80%; max-width: 400px; margin-top: 10px; }
@@ -19,7 +19,16 @@ HTML_TEMPLATE = """
         table { width: 90%; max-width: 600px; margin: 20px auto; border-collapse: collapse; font-size: 2vw; }
         th, td { border: 1px solid black; padding: 15px; text-align: center; }
 
-        /* Botón TAP circular más grande */
+        /* Contenedor para centrar el botón TAP */
+        .tap-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        /* Botón TAP circular bien centrado */
         .tap-button {
             width: 120px;
             height: 120px;
@@ -30,7 +39,6 @@ HTML_TEMPLATE = """
             font-weight: bold;
             border: none;
             cursor: pointer;
-            margin-top: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -77,7 +85,11 @@ HTML_TEMPLATE = """
         <label for="bpm">Introduce el BPM:</label>
         <input type="number" id="bpm" name="bpm" value="{{ bpm if bpm else '' }}" required>
         <br>
-        <button type="button" class="tap-button" onclick="tapBPM()">TAP</button>
+
+        <!-- Contenedor para centrar el botón TAP -->
+        <div class="tap-container">
+            <button type="button" class="tap-button" onclick="tapBPM()">TAP</button>
+        </div>
 
         <label for="instrumento">Selecciona tipo de Instrumento:</label>
         <select id="instrumento" name="instrumento">
