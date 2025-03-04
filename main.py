@@ -86,6 +86,16 @@ HTML_TEMPLATE = """
             box-shadow: 0 0 30px red;
         }
 
+        .web-link {
+            margin-top: 20px;
+            font-size: 2vw;
+            color: cyan;
+            text-decoration: none;
+        }
+        .web-link:hover {
+            text-decoration: underline;
+        }
+
         @media (max-width: 600px) {
             h2 { font-size: 6vw; }
             label, input, select, button { font-size: 5vw; }
@@ -93,31 +103,10 @@ HTML_TEMPLATE = """
             .tap-button { width: 160px; height: 160px; font-size: 6vw; }
         }
     </style>
-    <script>
-        let tapTimes = [];
-
-        function tapBPM() {
-            let now = performance.now();
-            tapTimes.push(now);
-
-            if (tapTimes.length > 1) {
-                let intervals = [];
-                for (let i = 1; i < tapTimes.length; i++) {
-                    intervals.push(tapTimes[i] - tapTimes[i - 1]);
-                }
-                let avgInterval = intervals.reduce((a, b) => a + b, 0) / intervals.length;
-                let bpm = Math.round(60000 / avgInterval);
-                document.getElementById("bpm").value = bpm;
-            }
-
-            if (tapTimes.length > 5) {
-                tapTimes.shift();
-            }
-        }
-    </script>
 </head>
 <body>
     <h2>Calculadora de Reverb</h2>
+    <a href="https://www.martincalabria.com" target="_blank" class="web-link">Visita mi web</a>
     <form method="POST">
         <label for="bpm">Introduce el BPM:</label>
         <input type="number" id="bpm" autofocus name="bpm" value="{{ bpm if bpm else '' }}" required>
